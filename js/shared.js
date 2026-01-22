@@ -1,6 +1,6 @@
 /**
  * Shared JavaScript - User Data & Utilities
- * 
+ *
  * Manages user profile data that persists across pages using localStorage.
  * This file should be included on all pages before page-specific scripts.
  */
@@ -11,41 +11,53 @@
 
 /** Available avatar icons for user selection */
 const AVATAR_OPTIONS = [
-    '🎮', '⚡', '🔥', '💧', '🌿',
-    '👤', '🎯', '⭐', '🏆', '💎',
-    '🐉', '👻', '🦋', '🌙', '☀️'
+  "🎮",
+  "⚡",
+  "🔥",
+  "💧",
+  "🌿",
+  "👤",
+  "🎯",
+  "⭐",
+  "🏆",
+  "💎",
+  "🐉",
+  "👻",
+  "🦋",
+  "🌙",
+  "☀️",
 ];
 
 /** Default user profile values */
 const DEFAULT_PROFILE = {
-    username: 'Trainer',
-    avatar: '🎮',
-    coins: 500,
-    stats: {
-        totalBattles: 0,
-        totalWins: 0,
-        bestStreak: 0,
-        currentStreak: 0
-    }
+  username: "Trainer",
+  avatar: "🎮",
+  coins: 500,
+  stats: {
+    totalBattles: 0,
+    totalWins: 0,
+    bestStreak: 0,
+    currentStreak: 0,
+  },
 };
 
 /** localStorage keys */
-const STORAGE_KEY = 'pokemonBattleUser';
-const TEAM_STORAGE_KEY = 'pokemonBattleTeam';
-const BATTLE_PROGRESS_KEY = 'pokemonBattleProgress';
-const ENEMY_STORAGE_KEY = 'pokemonBattleEnemy';
+const STORAGE_KEY = "pokemonBattleUser";
+const TEAM_STORAGE_KEY = "pokemonBattleTeam";
+const BATTLE_PROGRESS_KEY = "pokemonBattleProgress";
+const ENEMY_STORAGE_KEY = "pokemonBattleEnemy";
 
 /** Coin costs for actions */
 const COSTS = {
-    REVIVE: 50,
-    NEW_POKEMON: 100,
-    HEAL_ALL: 75
+  REVIVE: 50,
+  NEW_POKEMON: 100,
+  HEAL_ALL: 75,
 };
 
 /** Coin rewards */
 const REWARDS = {
-    WIN_BATTLE: 25,
-    DEFEAT_POKEMON: 10
+  WIN_BATTLE: 25,
+  DEFEAT_POKEMON: 10,
 };
 
 // ==========================================
@@ -58,24 +70,24 @@ const REWARDS = {
  * @returns {Object} User profile object
  */
 function getUserProfile() {
-    try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            const parsed = JSON.parse(stored);
-            // Merge with defaults to handle any missing fields
-            return {
-                ...DEFAULT_PROFILE,
-                ...parsed,
-                stats: {
-                    ...DEFAULT_PROFILE.stats,
-                    ...(parsed.stats || {})
-                }
-            };
-        }
-    } catch (error) {
-        console.error('Error reading user profile:', error);
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Merge with defaults to handle any missing fields
+      return {
+        ...DEFAULT_PROFILE,
+        ...parsed,
+        stats: {
+          ...DEFAULT_PROFILE.stats,
+          ...(parsed.stats || {}),
+        },
+      };
     }
-    return { ...DEFAULT_PROFILE };
+  } catch (error) {
+    console.error("Error reading user profile:", error);
+  }
+  return { ...DEFAULT_PROFILE };
 }
 
 /**
@@ -83,11 +95,11 @@ function getUserProfile() {
  * @param {Object} profile - User profile object to save
  */
 function saveUserProfile(profile) {
-    try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
-    } catch (error) {
-        console.error('Error saving user profile:', error);
-    }
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+  } catch (error) {
+    console.error("Error saving user profile:", error);
+  }
 }
 
 /**
@@ -96,17 +108,17 @@ function saveUserProfile(profile) {
  * @returns {Object} Updated profile
  */
 function updateUserProfile(updates) {
-    const profile = getUserProfile();
-    const updated = {
-        ...profile,
-        ...updates,
-        stats: {
-            ...profile.stats,
-            ...(updates.stats || {})
-        }
-    };
-    saveUserProfile(updated);
-    return updated;
+  const profile = getUserProfile();
+  const updated = {
+    ...profile,
+    ...updates,
+    stats: {
+      ...profile.stats,
+      ...(updates.stats || {}),
+    },
+  };
+  saveUserProfile(updated);
+  return updated;
 }
 
 /**
@@ -114,10 +126,10 @@ function updateUserProfile(updates) {
  * @returns {Object} Updated profile with reset stats
  */
 function resetUserStats() {
-    const profile = getUserProfile();
-    profile.stats = { ...DEFAULT_PROFILE.stats };
-    saveUserProfile(profile);
-    return profile;
+  const profile = getUserProfile();
+  profile.stats = { ...DEFAULT_PROFILE.stats };
+  saveUserProfile(profile);
+  return profile;
 }
 
 /**
@@ -126,24 +138,24 @@ function resetUserStats() {
  * @returns {Object} Updated profile
  */
 function recordBattleResult(won) {
-    const profile = getUserProfile();
-    
-    profile.stats.totalBattles++;
-    
-    if (won) {
-        profile.stats.totalWins++;
-        profile.stats.currentStreak++;
-        if (profile.stats.currentStreak > profile.stats.bestStreak) {
-            profile.stats.bestStreak = profile.stats.currentStreak;
-        }
-        // Award coins for winning
-        profile.coins += REWARDS.WIN_BATTLE;
-    } else {
-        profile.stats.currentStreak = 0;
+  const profile = getUserProfile();
+
+  profile.stats.totalBattles++;
+
+  if (won) {
+    profile.stats.totalWins++;
+    profile.stats.currentStreak++;
+    if (profile.stats.currentStreak > profile.stats.bestStreak) {
+      profile.stats.bestStreak = profile.stats.currentStreak;
     }
-    
-    saveUserProfile(profile);
-    return profile;
+    // Award coins for winning
+    profile.coins += REWARDS.WIN_BATTLE;
+  } else {
+    profile.stats.currentStreak = 0;
+  }
+
+  saveUserProfile(profile);
+  return profile;
 }
 
 // ==========================================
@@ -155,7 +167,7 @@ function recordBattleResult(won) {
  * @returns {number} Current coins
  */
 function getCoins() {
-    return getUserProfile().coins;
+  return getUserProfile().coins;
 }
 
 /**
@@ -164,10 +176,10 @@ function getCoins() {
  * @returns {number} New balance
  */
 function addCoins(amount) {
-    const profile = getUserProfile();
-    profile.coins += amount;
-    saveUserProfile(profile);
-    return profile.coins;
+  const profile = getUserProfile();
+  profile.coins += amount;
+  saveUserProfile(profile);
+  return profile.coins;
 }
 
 /**
@@ -176,13 +188,13 @@ function addCoins(amount) {
  * @returns {boolean} True if successful, false if insufficient funds
  */
 function spendCoins(amount) {
-    const profile = getUserProfile();
-    if (profile.coins >= amount) {
-        profile.coins -= amount;
-        saveUserProfile(profile);
-        return true;
-    }
-    return false;
+  const profile = getUserProfile();
+  if (profile.coins >= amount) {
+    profile.coins -= amount;
+    saveUserProfile(profile);
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -191,7 +203,7 @@ function spendCoins(amount) {
  * @returns {boolean} True if user has enough coins
  */
 function canAfford(amount) {
-    return getUserProfile().coins >= amount;
+  return getUserProfile().coins >= amount;
 }
 
 // ==========================================
@@ -203,11 +215,11 @@ function canAfford(amount) {
  * @param {Object[]} team - Array of Pokemon objects
  */
 function saveTeam(team) {
-    try {
-        localStorage.setItem(TEAM_STORAGE_KEY, JSON.stringify(team));
-    } catch (error) {
-        console.error('Error saving team:', error);
-    }
+  try {
+    localStorage.setItem(TEAM_STORAGE_KEY, JSON.stringify(team));
+  } catch (error) {
+    console.error("Error saving team:", error);
+  }
 }
 
 /**
@@ -215,22 +227,22 @@ function saveTeam(team) {
  * @returns {Object[]|null} Team array or null if not found
  */
 function loadTeam() {
-    try {
-        const stored = localStorage.getItem(TEAM_STORAGE_KEY);
-        if (stored) {
-            return JSON.parse(stored);
-        }
-    } catch (error) {
-        console.error('Error loading team:', error);
+  try {
+    const stored = localStorage.getItem(TEAM_STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored);
     }
-    return null;
+  } catch (error) {
+    console.error("Error loading team:", error);
+  }
+  return null;
 }
 
 /**
  * Clears the saved team from localStorage.
  */
 function clearTeam() {
-    localStorage.removeItem(TEAM_STORAGE_KEY);
+  localStorage.removeItem(TEAM_STORAGE_KEY);
 }
 
 /**
@@ -239,11 +251,11 @@ function clearTeam() {
  * @param {Object} pokemon - Updated Pokemon object
  */
 function updateTeamPokemon(index, pokemon) {
-    const team = loadTeam();
-    if (team && index >= 0 && index < team.length) {
-        team[index] = pokemon;
-        saveTeam(team);
-    }
+  const team = loadTeam();
+  if (team && index >= 0 && index < team.length) {
+    team[index] = pokemon;
+    saveTeam(team);
+  }
 }
 
 /**
@@ -252,30 +264,30 @@ function updateTeamPokemon(index, pokemon) {
  * @returns {Object|null} Revived Pokemon or null if failed
  */
 function revivePokemon(index) {
-    const team = loadTeam();
-    if (team && index >= 0 && index < team.length) {
-        const pokemon = team[index];
-        if (pokemon.hp <= 0) {
-            pokemon.hp = pokemon.maxHp;
-            team[index] = pokemon;
-            saveTeam(team);
-            return pokemon;
-        }
+  const team = loadTeam();
+  if (team && index >= 0 && index < team.length) {
+    const pokemon = team[index];
+    if (pokemon.hp <= 0) {
+      pokemon.hp = pokemon.maxHp;
+      team[index] = pokemon;
+      saveTeam(team);
+      return pokemon;
     }
-    return null;
+  }
+  return null;
 }
 
 /**
  * Heals all Pokemon in the team to full HP.
  */
 function healAllPokemon() {
-    const team = loadTeam();
-    if (team) {
-        team.forEach(pokemon => {
-            pokemon.hp = pokemon.maxHp;
-        });
-        saveTeam(team);
-    }
+  const team = loadTeam();
+  if (team) {
+    team.forEach((pokemon) => {
+      pokemon.hp = pokemon.maxHp;
+    });
+    saveTeam(team);
+  }
 }
 
 // ==========================================
@@ -287,11 +299,11 @@ function healAllPokemon() {
  * @param {Object} progress - Progress object with round and wins
  */
 function saveBattleProgress(progress) {
-    try {
-        localStorage.setItem(BATTLE_PROGRESS_KEY, JSON.stringify(progress));
-    } catch (error) {
-        console.error('Error saving battle progress:', error);
-    }
+  try {
+    localStorage.setItem(BATTLE_PROGRESS_KEY, JSON.stringify(progress));
+  } catch (error) {
+    console.error("Error saving battle progress:", error);
+  }
 }
 
 /**
@@ -299,22 +311,22 @@ function saveBattleProgress(progress) {
  * @returns {Object} Progress object with round and wins, or defaults
  */
 function loadBattleProgress() {
-    try {
-        const stored = localStorage.getItem(BATTLE_PROGRESS_KEY);
-        if (stored) {
-            return JSON.parse(stored);
-        }
-    } catch (error) {
-        console.error('Error loading battle progress:', error);
+  try {
+    const stored = localStorage.getItem(BATTLE_PROGRESS_KEY);
+    if (stored) {
+      return JSON.parse(stored);
     }
-    return { round: 1, wins: 0 };
+  } catch (error) {
+    console.error("Error loading battle progress:", error);
+  }
+  return { round: 1, wins: 0 };
 }
 
 /**
  * Resets battle progress to initial values.
  */
 function resetBattleProgress() {
-    saveBattleProgress({ round: 1, wins: 0 });
+  saveBattleProgress({ round: 1, wins: 0 });
 }
 
 // ==========================================
@@ -326,11 +338,11 @@ function resetBattleProgress() {
  * @param {Object} enemy - Enemy Pokemon object
  */
 function saveEnemy(enemy) {
-    try {
-        localStorage.setItem(ENEMY_STORAGE_KEY, JSON.stringify(enemy));
-    } catch (error) {
-        console.error('Error saving enemy:', error);
-    }
+  try {
+    localStorage.setItem(ENEMY_STORAGE_KEY, JSON.stringify(enemy));
+  } catch (error) {
+    console.error("Error saving enemy:", error);
+  }
 }
 
 /**
@@ -338,22 +350,22 @@ function saveEnemy(enemy) {
  * @returns {Object|null} Enemy Pokemon or null if not found
  */
 function loadEnemy() {
-    try {
-        const stored = localStorage.getItem(ENEMY_STORAGE_KEY);
-        if (stored) {
-            return JSON.parse(stored);
-        }
-    } catch (error) {
-        console.error('Error loading enemy:', error);
+  try {
+    const stored = localStorage.getItem(ENEMY_STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored);
     }
-    return null;
+  } catch (error) {
+    console.error("Error loading enemy:", error);
+  }
+  return null;
 }
 
 /**
  * Clears the saved enemy Pokemon.
  */
 function clearEnemy() {
-    localStorage.removeItem(ENEMY_STORAGE_KEY);
+  localStorage.removeItem(ENEMY_STORAGE_KEY);
 }
 
 // ==========================================
@@ -365,25 +377,26 @@ function clearEnemy() {
  * Call this on page load to show the user's avatar and name in the header.
  */
 function renderUserBadge() {
-    const badgeContainer = document.getElementById('user-badge');
-    if (!badgeContainer) return;
-    
-    const profile = getUserProfile();
-    
-    const requests = [
-        fetch('/api/user-data'),
-        fetch('/api/team-info'),
-        fetch('/api/stats')
-    ];
-    
-    Promise.all(requests)
-        .then(responses => Promise.all(responses.map(r => r.json())))
-        .then(([userData, teamData, stats]) => {
-            badgeContainer.innerHTML = createUserBadgeTemplate(profile);
-        })
-        .catch(error => {
-            console.error('Failed to load user badge data:', error);
-        });
+  const badgeContainer = document.getElementById("user-badge");
+  if (!badgeContainer) return;
+
+  const profile = getUserProfile();
+
+  const requests = [
+    fetch("/api/user-data"),
+    fetch("/api/team-info"),
+    fetch("/api/stats"),
+  ];
+
+  Promise.allSettled(requests)
+    .then((responses) => Promise.allSettled(responses.map((r) => r.json())))
+    .then(([userData, teamData, stats]) => {
+      console.log("User Data:", userData);
+      badgeContainer.innerHTML = createUserBadgeTemplate(profile);
+    })
+    .catch((error) => {
+      console.error("Failed to load user badge data:", error);
+    });
 }
 
 /**
@@ -392,27 +405,30 @@ function renderUserBadge() {
  * @param {Function} onSelect - Callback when avatar is selected
  */
 function renderAvatarGrid(containerId, onSelect) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    
-    const profile = getUserProfile();
-    container.innerHTML = createAvatarGridTemplate(AVATAR_OPTIONS, profile.avatar);
-    
-    // Add click handlers
-    container.querySelectorAll('.avatar-option').forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Remove selected from all
-            container.querySelectorAll('.avatar-option').forEach(b => 
-                b.classList.remove('selected')
-            );
-            // Add selected to clicked
-            btn.classList.add('selected');
-            // Call callback
-            if (onSelect) {
-                onSelect(btn.dataset.avatar);
-            }
-        });
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  const profile = getUserProfile();
+  container.innerHTML = createAvatarGridTemplate(
+    AVATAR_OPTIONS,
+    profile.avatar,
+  );
+
+  // Add click handlers
+  container.querySelectorAll(".avatar-option").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // Remove selected from all
+      container
+        .querySelectorAll(".avatar-option")
+        .forEach((b) => b.classList.remove("selected"));
+      // Add selected to clicked
+      btn.classList.add("selected");
+      // Call callback
+      if (onSelect) {
+        onSelect(btn.dataset.avatar);
+      }
     });
+  });
 }
 
 /**
@@ -421,7 +437,7 @@ function renderAvatarGrid(containerId, onSelect) {
  * @returns {string} Formatted number
  */
 function formatNumber(num) {
-    return num.toLocaleString();
+  return num.toLocaleString();
 }
 
 /**
@@ -430,11 +446,11 @@ function formatNumber(num) {
  * @returns {Object} Object with tier name and CSS class
  */
 function getStrengthTier(strength) {
-    if (strength >= 80) return { name: 'S', class: 'strength-s' };
-    if (strength >= 60) return { name: 'A', class: 'strength-a' };
-    if (strength >= 40) return { name: 'B', class: 'strength-b' };
-    if (strength >= 20) return { name: 'C', class: 'strength-c' };
-    return { name: 'D', class: 'strength-d' };
+  if (strength >= 80) return { name: "S", class: "strength-s" };
+  if (strength >= 60) return { name: "A", class: "strength-a" };
+  if (strength >= 40) return { name: "B", class: "strength-b" };
+  if (strength >= 20) return { name: "C", class: "strength-c" };
+  return { name: "D", class: "strength-d" };
 }
 
 // ==========================================
@@ -447,10 +463,10 @@ function getStrengthTier(strength) {
  * @returns {string} HTML template
  */
 function createUserBadgeTemplate(profile) {
-    return `
+  return `
         <div class="user-badge">
             <span class="avatar">${profile.avatar}</span>
-            <span class="username">${profile.avatar} ${profile.username}</span>
+            <span class="username"> ${profile.username} ${profile.avatar} </span>
             <span class="coins">💰 ${formatNumber(profile.coins)}</span>
         </div>
     `;
@@ -463,47 +479,49 @@ function createUserBadgeTemplate(profile) {
  * @returns {string} HTML template
  */
 function createAvatarGridTemplate(avatarOptions, selectedAvatar) {
-    return avatarOptions.map(avatar => {
-        const selected = avatar === selectedAvatar ? 'selected' : '';
-        return `<button class="avatar-option ${selected}" data-avatar="${avatar}">${avatar}</button>`;
-    }).join('');
+  return avatarOptions
+    .map((avatar) => {
+      const selected = avatar === selectedAvatar ? "selected" : "";
+      return `<button class="avatar-option ${selected}" data-avatar="${avatar}">${avatar}</button>`;
+    })
+    .join("");
 }
 
 // ==========================================
 // Export for module usage (if needed later)
 // ==========================================
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        AVATAR_OPTIONS,
-        DEFAULT_PROFILE,
-        COSTS,
-        REWARDS,
-        getUserProfile,
-        saveUserProfile,
-        updateUserProfile,
-        resetUserStats,
-        recordBattleResult,
-        getCoins,
-        addCoins,
-        spendCoins,
-        canAfford,
-        saveTeam,
-        loadTeam,
-        clearTeam,
-        updateTeamPokemon,
-        revivePokemon,
-        healAllPokemon,
-        saveBattleProgress,
-        loadBattleProgress,
-        resetBattleProgress,
-        saveEnemy,
-        loadEnemy,
-        clearEnemy,
-        renderUserBadge,
-        renderAvatarGrid,
-        formatNumber,
-        getStrengthTier
-    };
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    AVATAR_OPTIONS,
+    DEFAULT_PROFILE,
+    COSTS,
+    REWARDS,
+    getUserProfile,
+    saveUserProfile,
+    updateUserProfile,
+    resetUserStats,
+    recordBattleResult,
+    getCoins,
+    addCoins,
+    spendCoins,
+    canAfford,
+    saveTeam,
+    loadTeam,
+    clearTeam,
+    updateTeamPokemon,
+    revivePokemon,
+    healAllPokemon,
+    saveBattleProgress,
+    loadBattleProgress,
+    resetBattleProgress,
+    saveEnemy,
+    loadEnemy,
+    clearEnemy,
+    renderUserBadge,
+    renderAvatarGrid,
+    formatNumber,
+    getStrengthTier,
+  };
 }
 
 // Add to buggr
