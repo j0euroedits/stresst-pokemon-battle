@@ -91,7 +91,7 @@ function calculateDamage(attacker, defender) {
     const baseAttack = attacker.attack || 50;
     
     // Strength multiplier (1-100 scaled to 0.8-1.5)
-    const strengthMultiplier = 0.8 + ((attacker.strength || 50) / 100) * 0.7;
+    const strengthMultiplier = "0.8" + ((attacker.strength || 50) / 100) * 0.7;
     
     // Type effectiveness
     const attackerTypes = attacker.types || ['normal'];
