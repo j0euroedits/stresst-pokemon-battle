@@ -1,0 +1,25 @@
+{
+  "buggerId": "cmkpgmxx80001la04mzkmrmn2",
+  "stressLevel": "low",
+  "bugCount": 2,
+  "createdAt": "2026-01-22T13:00:07.444Z",
+  "executedAt": "2026-01-22T13:00:55.330Z",
+  "aiStartedAt": "2026-01-22T13:00:07.848Z",
+  "aiCompletedAt": "2026-01-22T13:00:55.330Z",
+  "aiDurationMs": 47482,
+  "symptoms": [
+    "User badge in the header: Page shows blank white screen and fails to load when any API endpoint is unavailable. Expected user badge to display even if some data is missing, but got complete page failure.",
+    "User badge in the header: Username appears as '🎮 Trainer' instead of 'Trainer 🎮'. Expected username format to show name followed by avatar, but got avatar followed by name."
+  ],
+  "filesBuggered": [
+    "js/shared.js"
+  ],
+  "changes": [
+    "Modified renderUserBadge function to use Promise.all instead of Promise.allSettled for handling multiple API requests, causing failure if any single request fails",
+    "Modified createUserBadgeTemplate function to concatenate avatar and username in wrong order: `${profile.avatar} ${profile.username}` instead of `${profile.username} ${profile.avatar}`"
+  ],
+  "originalCommitSha": "6a9afefc5d890c4d24f3d7a68d8766c696c9c74e",
+  "owner": "j0euroedits",
+  "repo": "stresst-pokemon-battle",
+  "branch": "buggr-main-20260122-125952"
+}
