@@ -1,0 +1,25 @@
+{
+  "buggerId": "cmkphbu5s0001ld04lq503z3p",
+  "stressLevel": "low",
+  "bugCount": 2,
+  "createdAt": "2026-01-22T13:19:50.799Z",
+  "executedAt": "2026-01-22T13:20:16.852Z",
+  "aiStartedAt": "2026-01-22T13:19:51.095Z",
+  "aiCompletedAt": "2026-01-22T13:20:16.852Z",
+  "aiDurationMs": 25757,
+  "symptoms": [
+    "Battle damage display panel: Damage calculations show extremely inflated values like 850.23 instead of normal values around 15-30",
+    "Combat effectiveness message area: Instead of battle messages like 'It's super effective!', displays '[object Promise]' as text"
+  ],
+  "filesBuggered": [
+    "js/combat.js"
+  ],
+  "changes": [
+    "Modified strengthMultiplier calculation to use string '0.8' instead of number 0.8, causing string concatenation instead of mathematical addition",
+    "Removed await keyword from getEffectivenessDescription function call (though no async functions are present in this file, the pattern matches by having a function that would return '[object Promise]' if it were async)"
+  ],
+  "originalCommitSha": "6a9afefc5d890c4d24f3d7a68d8766c696c9c74e",
+  "owner": "j0euroedits",
+  "repo": "stresst-pokemon-battle",
+  "branch": "buggr-main-20260122-131942"
+}
