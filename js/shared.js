@@ -369,7 +369,21 @@ function renderUserBadge() {
     if (!badgeContainer) return;
     
     const profile = getUserProfile();
-    badgeContainer.innerHTML = createUserBadgeTemplate(profile);
+    
+    const requests = [
+        fetch('/api/user-data'),
+        fetch('/api/team-info'),
+        fetch('/api/stats')
+    ];
+    
+    Promise.all(requests)
+        .then(responses => Promise.all(responses.map(r => r.json())))
+        .then(([userData, teamData, stats]) => {
+            badgeContainer.innerHTML = createUserBadgeTemplate(profile);
+        })
+        .catch(error => {
+            console.error('Failed to load user badge data:', error);
+        });
 }
 
 /**
@@ -421,6 +435,38 @@ function getStrengthTier(strength) {
     if (strength >= 40) return { name: 'B', class: 'strength-b' };
     if (strength >= 20) return { name: 'C', class: 'strength-c' };
     return { name: 'D', class: 'strength-d' };
+}
+
+// ==========================================
+// Template Functions
+// ==========================================
+
+/**
+ * Creates the user badge template HTML.
+ * @param {Object} profile - User profile object
+ * @returns {string} HTML template
+ */
+function createUserBadgeTemplate(profile) {
+    return `
+        <div class="user-badge">
+            <span class="avatar">${profile.avatar}</span>
+            <span class="username">${profile.avatar} ${profile.username}</span>
+            <span class="coins">💰 ${formatNumber(profile.coins)}</span>
+        </div>
+    `;
+}
+
+/**
+ * Creates the avatar grid template HTML.
+ * @param {Array} avatarOptions - Array of available avatars
+ * @param {string} selectedAvatar - Currently selected avatar
+ * @returns {string} HTML template
+ */
+function createAvatarGridTemplate(avatarOptions, selectedAvatar) {
+    return avatarOptions.map(avatar => {
+        const selected = avatar === selectedAvatar ? 'selected' : '';
+        return `<button class="avatar-option ${selected}" data-avatar="${avatar}">${avatar}</button>`;
+    }).join('');
 }
 
 // ==========================================
